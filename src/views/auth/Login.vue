@@ -14,6 +14,7 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
@@ -23,12 +24,18 @@ export default {
     const error = ref(null);
 
     const store = useStore();
+    const router = useRouter();
 
     const submitLogin = async () => {
-      await store.dispatch("login", {
-        email: email.value,
-        password: password.value,
-      });
+      try {
+        await store.dispatch("login", {
+          email: email.value,
+          password: password.value,
+        });
+        router.push({ name: "Home" });
+      } catch (err) {
+        error.value = err.message;
+      }
     };
 
     return { submitLogin, email, password, error };
