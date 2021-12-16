@@ -1,4 +1,6 @@
-# emergency_manager
+# Emergency Manager
+
+An emergency manager app that lets you manage fire trucks, police cars, ambulances and more during an emergency
 
 ## Project setup
 ```
