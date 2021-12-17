@@ -4,14 +4,13 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
   setup() {
     const store = useStore();
 
-    const firetrucksList = store.state.firetrucks;
-
-    return { firetrucksList };
+    return { firetrucksList: computed(() => store.state.firetrucks) };
   },
 };
 </script>
