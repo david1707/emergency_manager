@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
 export default createStore({
@@ -29,15 +29,17 @@ export default createStore({
       else throw new Error("Error while login.");
     },
     async loadVehicle(context, vehicleName) {
-      const vehicleList = [];
+      const q = query(collection(db, vehicleName));
 
-      const querySnapshot = await getDocs(collection(db, vehicleName));
-      querySnapshot.forEach((doc) =>
-      vehicleList.push({ ...doc.data(), id: doc.id })
-      );
-      context.commit("updateVehicle", {
-        vehicleName: vehicleName,
-        vehicleList: vehicleList,
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const vehicleList = [];
+        querySnapshot.forEach((doc) => {
+          vehicleList.push({ ...doc.data(), id: doc.id });
+        });
+        context.commit("updateVehicle", {
+          vehicleName: vehicleName,
+          vehicleList: vehicleList,
+        });
       });
     },
   },
@@ -46,7 +48,6 @@ export default createStore({
       state.user = payload;
     },
     updateVehicle(state, { vehicleName, vehicleList }) {
-      console.lo
       state[vehicleName] = vehicleList;
     },
   },
