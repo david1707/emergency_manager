@@ -5,10 +5,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import { useStore } from "vuex";
 
 export default {
-  name: 'Home',
-
-}
+  name: "Home",
+  setup() {
+    const store = useStore()
+    store.dispatch('loadVehicle', 'ambulances')
+    store.dispatch('loadVehicle', 'firetrucks')
+    store.dispatch('loadVehicle', 'policecars')
+  },
+};
 </script>
